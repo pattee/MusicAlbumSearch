@@ -1,30 +1,43 @@
 import React from 'react';
+import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
-import cats from './img/cats.jpg';
 import './App.css';
+import axios from 'axios';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <div className="container">
-          <div className="row">
-            <div className="col-sm">
-              <div className="input-group mb-3">
-                <div className="input-group-prepend">
-                  <span className="input-group-text" id="inputGroup-sizing-default">Album search</span>
-                </div>
-                <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
-              </div>
-            </div>
+class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = { albumList: '' };
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
+  }
+
+  async onSearchSubmit(){
+      const response = await axios.get("https://itunes.apple.com/lookup?id=909253&entity=album", {
+        params: {
+          ID: 909253,
+          entity: "album"
+        },
+        headers: {'X-Requested-With': 'XMLHttpRequest'}
+      });
+
+      this.setState({ albumList: response.data.results });
+      console.log(this.state);
+  }
+
+  render(){
+    return (
+      <div className="App">
+        <header className="App-header">
+          <div className="container">
+            <SearchBar onSubmit={this.onSearchSubmit} />
           </div>
-        </div>
-        <section>
-          <SearchResults />
-        </section>
-      </header>
-    </div>
-  );
+          <section>
+            <SearchResults />
+          </section>
+        </header>
+      </div>
+    );
+  }
 }
 
 export default App;
