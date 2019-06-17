@@ -1,27 +1,35 @@
 import React from 'react';
 import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
-import './App.css';
 import axios from 'axios';
 
 class App extends React.Component {
   constructor(props){
     super(props);
-    this.state = { albumList: '' };
+    this.state = { albumList: [], errorMessage: false };
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
   }
 
-  async onSearchSubmit(){
-      const response = await axios.get("https://itunes.apple.com/lookup?id=909253&entity=album", {
-        params: {
-          ID: 909253,
-          entity: "album"
-        },
+  async onSearchSubmit(artist){
+      const responseArtist = await axios.get(`https://itunes.apple.com/search?term=${artist}`, {
         headers: {'X-Requested-With': 'XMLHttpRequest'}
+      }).catch(error => {
+          console.log(error);
       });
 
-      this.setState({ albumList: response.data.results });
-      console.log(this.state);
+      if(responseArtist.data.results.length != 0) {
+        const responseAlbum = await axios.get(`https://itunes.apple.com/lookup?id=${responseArtist.data.results[0].artistId}&entity=album`, {
+          params: {
+            ID: responseArtist.data.results[0].artistId,
+            entity: "album"
+          },
+          headers: {'X-Requested-With': 'XMLHttpRequest'}
+        }).catch(error => {
+            console.log(error);;
+        });
+
+        this.setState({ albumList: responseAlbum.data.results });
+      }
   }
 
   render(){
@@ -32,7 +40,7 @@ class App extends React.Component {
             <SearchBar onSubmit={this.onSearchSubmit} />
           </div>
           <section>
-            <SearchResults />
+            <SearchResults albumList={this.state.albumList} />
           </section>
         </header>
       </div>

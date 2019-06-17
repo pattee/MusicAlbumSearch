@@ -18,8 +18,8 @@ class SearchBar extends React.Component {
           <div className="input-group mb-3">
             <form onSubmit={this.onFormSubmit}>
               <div className="form-group">
-                <label htmlFor="albumSearch">Search for Albums by Artist:</label>
-                <input type="text" className="form-control" id="albumSearch" value={ this.state.term } onChange={(e) => this.setState({ artistName: e.target.value })} aria-label="Album Search by Artist" aria-describedby="inputGroup-sizing-default" />
+                <label htmlFor="albumSearch" style={{fontSize: "20px", marginBottom: "1rem", marginTop: "1rem"}}>Search for Albums by Artist:</label>
+                <input type="text" style={{marginBottom: "1rem"}} className="form-control" id="albumSearch" value={ this.state.term } onChange={(e) => this.setState({ artistName: e.target.value })} aria-label="Album Search by Artist" aria-describedby="inputGroup-sizing-default" />
                 <button type="submit" className="btn btn-primary">Submit</button>
               </div>
             </form>

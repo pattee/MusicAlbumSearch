@@ -1,23 +1,28 @@
 import React from 'react';
-import cats from './img/cats.jpg';
-const axios = require('axios');
 
-class SearchResults extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {};
-  }
-
-  render(){
-    return (
-      <div className="container">
-        <div className="row">
-          "there there......."
-
+function SearchResults(props) {
+  const albumsList = props.albumList.map((item) => {
+    if(item.wrapperType === "collection") {
+      return (
+        <div key={item.collectionId} className="card" style={{width: "15rem", margin: "1rem"}}>
+          <img src={item.artworkUrl100} className="card-img-top" alt={item.collectionName} />
+          <div className="card-body">
+            <p className="card-text">Artist Name: {item.artistName}</p>
+            <p className="card-text">Album Name: {item.collectionName}</p>
+            <p className="card-text">Year Released: {item.releaseDate}</p>
+          </div>
         </div>
+      );
+    }
+  });
+
+  return (
+    <div className="container">
+      <div className="row">
+        {albumsList}
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default SearchResults;
